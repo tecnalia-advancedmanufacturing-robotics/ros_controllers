@@ -58,7 +58,14 @@ namespace joint_state_controller
     }
 
     // realtime publisher
-    realtime_pub_.reset(new realtime_tools::RealtimePublisher<sensor_msgs::JointState>(root_nh, "joint_states", 4));
+    if (controller_nh.param<bool>("controller_ns", false))
+    {
+      realtime_pub_.reset(new realtime_tools::RealtimePublisher<sensor_msgs::JointState>(controller_nh, "joint_states", 4));
+    }
+    else
+    {
+      realtime_pub_.reset(new realtime_tools::RealtimePublisher<sensor_msgs::JointState>(root_nh, "joint_states", 4));
+    }
 
     // get joints and allocate message
     for (unsigned i=0; i<num_hw_joints_; i++){
