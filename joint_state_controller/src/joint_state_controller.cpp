@@ -41,8 +41,12 @@ namespace joint_state_controller
                                   ros::NodeHandle&                         root_nh,
                                   ros::NodeHandle&                         controller_nh)
   {
-    // get all joint names from the hardware interface
-    const std::vector<std::string>& joint_names = hw->getNames();
+    std::vector<std::string> joint_names;
+    if (!controller_nh.getParam("joints", joint_names))
+    {
+      // get all joint names from the hardware interface
+      joint_names = hw->getNames();
+    }
     num_hw_joints_ = joint_names.size();
     for (unsigned i=0; i<num_hw_joints_; i++)
       ROS_DEBUG("Got joint %s", joint_names[i].c_str());
